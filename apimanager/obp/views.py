@@ -159,7 +159,7 @@ class GatewayLoginView(FormView, LoginToDjangoMixin):
         self.login_to_django()
         return super(GatewayLoginView, self).form_valid(form)
 
-
+# 用来进行跳转, 默认是永久重定向（301），可以直接在urls.py中使用，非常方便：
 class LogoutView(RedirectView):
     """View to logout"""
 

@@ -43,7 +43,7 @@ class FilterUsername(BaseFilter):
         filtered = [x for x in data if x['username'].find(filter_value) != -1]
         return filtered
 
-
+# LoginRequiredMixin mean all the following operations need login first!!
 class IndexView(LoginRequiredMixin, TemplateView):
     """Index view for users"""
     template_name = "users/index.html"
@@ -62,6 +62,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
             else:
                 for entitlement in entitlements['list']:
                     role_names.append(entitlement['role_name'])
+                    #bk think about all the error handlings
         except APIError as err:
             messages.error(self.request, err)
             return [], []
@@ -74,8 +75,11 @@ class IndexView(LoginRequiredMixin, TemplateView):
         role_names.sort()
 
         return role_names
-
+    
+    # this is most import method under the `TemplateView` view. it will update the HTML page!
     def get_context_data(self, **kwargs):
+        """only need to overwrite this method, not need any render stuff !!"""
+        # you get the context from super, and return it in the end!
         context = super(IndexView, self).get_context_data(**kwargs)
 
         api = API(self.request.session.get('obp'))
@@ -94,6 +98,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
         users = []
         try:
             response = api.get(urlpath)
+            # if this return error message. it will continue, not exception here. just put error into the messages.
             if 'code' in response and response['code'] >= 400:
                 messages.error(self.request, response['message'] + "! No user will be shown!")
             else:
@@ -109,6 +114,8 @@ class IndexView(LoginRequiredMixin, TemplateView):
                 .apply([users] if username else users['users'])
         except:
             users = []
+            
+        # prepare all the data and send to the html page!!!    
         context.update({
             'role_names': role_names,
             'statistics': {
