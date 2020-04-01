@@ -8,9 +8,13 @@ from django.conf.urls import url
 from .views import IndexView, DetailView, MyDetailView, DeleteEntitlementView
 
 urlpatterns = [
-    url(r'^all$',
-        IndexView.as_view(),
-        name='users-index'),
+    url(
+        r'^all$', # URL!
+        # as_view() from the TemplateView, 
+        # you do not need to write the`render(request, '/path/to/template.html')` again..   
+        IndexView.as_view(), # view, method !
+        name='users-index' # namespace!
+        ),
     url(r'^all/user_id/(?P<user_id>[\w\@\.\+-]+)$',
         DetailView.as_view(),
         name='users-detail'),

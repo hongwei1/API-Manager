@@ -4,7 +4,7 @@ URLs for apimanager
 """
 
 from django.conf.urls import url, include
-
+from django.contrib import admin
 from base.views import HomeView
 from obp.views import (
     OAuthInitiateView, OAuthAuthorizeView,
@@ -15,6 +15,8 @@ from obp.views import (
 
 
 urlpatterns = [
+    # This will open the admin portal 
+    url('admin/', admin.site.urls),# should always use include(), this is the only exception. 
     url(r'^$', HomeView.as_view(), name="home"),
     # Defining authentication URLs here and not including oauth.urls for
     # backward compatibility
